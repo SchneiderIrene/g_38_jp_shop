@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -24,7 +25,24 @@ public class Product {
     @Column(name = "is_active")
     private boolean isActive;
 
+    @ManyToMany
+    private Set<Role> roles;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public Long getId() {
         return id;
@@ -52,12 +70,12 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(id, title, price, isActive);
     }
 
     @Override
     public String toString() {
-        return String.format("Product: ID - %d, title - %S, price - %.2f, active - %s",
+        return String.format("Product: ID - %d, title - %s, price - %.2f, active - %s",
                 id, title, price, isActive ? "yes" : "no");
     }
 }

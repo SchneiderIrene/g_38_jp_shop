@@ -1,7 +1,10 @@
-package de.ait_tr.g_38_jp_shop.service.interfaces;
+package de.ait_tr.g_38_jp_shop.service;
 
+import de.ait_tr.g_38_jp_shop.domain.dto.ProductDto;
 import de.ait_tr.g_38_jp_shop.domain.entity.Product;
 import de.ait_tr.g_38_jp_shop.repository.ProductRepository;
+import de.ait_tr.g_38_jp_shop.service.interfaces.ProductService;
+import de.ait_tr.g_38_jp_shop.service.mapping.ProductMappingService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,23 +14,32 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository repository;
+    private ProductMappingService mappingService;
 
-    public ProductServiceImpl(ProductRepository repository) {
+    public ProductServiceImpl(ProductRepository repository, ProductMappingService mappingService) {
         this.repository = repository;
+        this.mappingService = mappingService;
     }
 
     @Override
-    public Product save(Product product) {
-        return null;
+    public ProductDto save(ProductDto dto) {
+        Product product = mappingService.mapDtoToEntity(dto);
+        repository.save(product);
+        return mappingService.mapEntityToDto(product);
     }
 
     @Override
-    public List<Product> getAll() {
-        return null;
+    public List<ProductDto> getAll() {
+
+        return repository.findAll()
+                .stream()
+                .filter(x->x.isActive())
+                .map(x->mappingService.mapEntityToDto(x))
+                .toList();
     }
 
     @Override
-    public Product getById(Long id) {
+    public ProductDto getById(Long id) {
 
         if (id == null || id < 1) {
             throw new RuntimeException("Product ID is incorrect");
@@ -39,11 +51,11 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Product not found");
         }
 
-        return product;
+        return mappingService.mapEntityToDto(product);
     }
 
     @Override
-    public void update(Product product) {
+    public void update(ProductDto product) {
 
     }
 
