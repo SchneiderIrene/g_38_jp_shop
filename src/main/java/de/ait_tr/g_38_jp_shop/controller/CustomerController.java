@@ -23,7 +23,7 @@ public class CustomerController {
         return service.getById(id);
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public CustomerDto save(@RequestBody CustomerDto customer) {
         return service.save(customer);
     }
@@ -32,7 +32,27 @@ public class CustomerController {
         return service.findAll();
     }
 
-    @GetMapping("/all/active") public List<CustomerDto> getAllActive (){
+    @GetMapping("/all/active")
+    public List<CustomerDto> getAllActive (){
         return service.findAllActive();
+    }
+
+    @PostMapping("/update")
+    public void update(@RequestBody CustomerDto dto) {
+        service.update(dto);
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id) {
+        service.deleteById(id);
+    }
+
+    @DeleteMapping("/delete/name")
+    public void deleteByName(@RequestParam String name) {
+        service.deleteByName(name);
+    }
+
+    @PutMapping("/restore") public void restoreById(@RequestParam Long id) {
+        service.restoreById(id);
     }
 }

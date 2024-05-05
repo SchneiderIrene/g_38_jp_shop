@@ -2,6 +2,7 @@ package de.ait_tr.g_38_jp_shop.service;
 
 import de.ait_tr.g_38_jp_shop.domain.dto.CustomerDto;
 import de.ait_tr.g_38_jp_shop.domain.entity.Customer;
+import de.ait_tr.g_38_jp_shop.domain.entity.Product;
 import de.ait_tr.g_38_jp_shop.repository.CustomerRepository;
 import de.ait_tr.g_38_jp_shop.service.interfaces.CustomerService;
 import de.ait_tr.g_38_jp_shop.service.mapping.CustomerMappingService;
@@ -60,22 +61,43 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void update(CustomerDto customer) {
-
+    public void update(CustomerDto dto) {
+        Customer existedCustomer = repository.findById(dto.getCustomerId()).orElse(null);
+        if (existedCustomer != null) {
+            existedCustomer.setName(dto.getCustomerName());
+            existedCustomer.setActive(dto.isActive());
+            repository.save(existedCustomer);
+        }else {
+            throw new RuntimeException("Customer not found");
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-
+        Customer customer = repository.findById(id).orElse(null);
+        if (customer == null) {
+            throw new RuntimeException("Product not found");
+        }
+        repository.delete(customer);
     }
 
     @Override
     public void deleteByName(String name) {
-
+        Customer customer = repository.findByName(name);
+        if (customer == null) {
+            throw new RuntimeException("Product not found");
+        }
+        repository.delete(customer);
     }
 
     @Override
     public void restoreById(Long id) {
-
+        Customer customer = repository.findById(id).orElse(null);
+        if (customer == null) {
+            throw new RuntimeException("Product not found");
+        }
+        customer.setActive(true);
+        repository.save(customer);
     }
+
 }

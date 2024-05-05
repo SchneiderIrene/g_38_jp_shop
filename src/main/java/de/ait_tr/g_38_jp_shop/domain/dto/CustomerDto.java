@@ -6,6 +6,7 @@ public class CustomerDto {
 
     private Long customerId;
     private String customerName;
+    private boolean isActive;
 
     public CustomerDto() {
     }
@@ -24,6 +25,14 @@ public class CustomerDto {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

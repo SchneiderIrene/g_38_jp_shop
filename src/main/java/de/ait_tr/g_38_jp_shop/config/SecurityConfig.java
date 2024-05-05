@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/restore").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/customers/all").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/customers/all/active").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/customers").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/customers/save").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults()).build();
     }
