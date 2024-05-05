@@ -8,7 +8,9 @@ import de.ait_tr.g_38_jp_shop.service.mapping.ProductMappingService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -55,37 +57,71 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void update(ProductDto product) {
-
+    public void update(ProductDto dto) {
+        Product existedProduct = repository.findById(dto.getProductId()).orElse(null);
+        if (existedProduct != null) {
+            existedProduct.setTitle(dto.getTitle());
+            existedProduct.setPrice(dto.getPrice());
+            repository.save(existedProduct);
+        }else {
+            throw new RuntimeException("Product not found");
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-
+        Product product = repository.findById(id).orElse(null);
+        if (product == null) {
+            throw new RuntimeException("Product not found");
+        }
+        repository.delete(product);
     }
 
     @Override
     public void deleteByTitle(String title) {
-
+    Product product = repository.findByTitle(title);
+    if (product == null) {
+        throw new RuntimeException("Product not found");
+    }
+    repository.delete(product);
     }
 
     @Override
     public void restoreById(Long id) {
-
+    Product product = repository.findById(id).orElse(null);
+    if (product == null) {
+        throw new RuntimeException("Product not found");
+    }
+    product.setActive(true);
+    repository.save(product);
     }
 
     @Override
     public int getTotalQuantity() {
-        return 0;
+        List<Product> products = repository.findAll();
+        return products.size();
     }
 
     @Override
     public BigDecimal getTotalPrice() {
-        return null;
+        List <Product> products = repository.findAll();
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (Product product : products) {
+            totalPrice = totalPrice.add(product.getPrice());
+        }
+        return totalPrice;
     }
 
     @Override
     public BigDecimal getAveragePrice() {
-        return null;
+        List <Product> products = repository.findAll();
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (Product product : products) {
+            totalPrice = totalPrice.add(product.getPrice());
+        }
+        if(!products.isEmpty()) {
+            return totalPrice.divide(BigDecimal.valueOf(products.size()), 2, RoundingMode.HALF_UP);
+        }
+        return BigDecimal.ZERO;
     }
 }

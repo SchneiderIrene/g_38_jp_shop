@@ -28,7 +28,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(x->x
                         .requestMatchers(HttpMethod.GET, "/products/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/totalQuantity").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/totalQuantity").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/totalPrice").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/averagePrice").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/update").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/delete").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/delete/title").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/restore").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/customers/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/customers/all/active").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/customers").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults()).build();
     }

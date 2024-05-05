@@ -1,10 +1,10 @@
 package de.ait_tr.g_38_jp_shop.controller;
 
 import de.ait_tr.g_38_jp_shop.domain.dto.ProductDto;
-import de.ait_tr.g_38_jp_shop.domain.entity.Product;
 import de.ait_tr.g_38_jp_shop.service.interfaces.ProductService;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -45,8 +45,43 @@ public class ProductController {
         return service.save(product);
     }
 
-    @GetMapping("/all") public List<ProductDto> getAll(){
+    @GetMapping("/all")
+    public List<ProductDto> getAll(){
         return  service.getAll();
+    }
+
+    @PostMapping("/update")
+    public void update(@RequestBody ProductDto dto) {
+        service.update(dto);
+    }
+
+    @GetMapping("/totalQuantity")
+    public int getTotalQuantity () {
+        return service.getTotalQuantity();
+    }
+
+    @GetMapping("/totalPrice")
+    public BigDecimal getTotalPrice () {
+        return service.getTotalPrice();
+    }
+
+    @GetMapping("/averagePrice")
+    public BigDecimal getAveragePrice () {
+        return service.getAveragePrice();
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteById(@RequestParam Long id) {
+        service.deleteById(id);
+    }
+
+    @DeleteMapping("/delete/title")
+    public void deleteByTitle(@RequestParam String title) {
+        service.deleteByTitle(title);
+    }
+
+    @PutMapping("/restore") public  void restoreById(@RequestParam Long id) {
+        service.restoreById(id);
     }
 
 

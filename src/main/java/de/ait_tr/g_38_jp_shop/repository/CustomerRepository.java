@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    @Query(value = "SELECT * FROM product...", nativeQuery = true)
+    @Query(value = "SELECT * FROM customer...", nativeQuery = true)
     Customer findByName(String name);
+
+    @Query(value = "SELECT * FROM customer...", nativeQuery = true)
+    Customer findById(long id);
 }
