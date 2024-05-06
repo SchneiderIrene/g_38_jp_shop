@@ -16,7 +16,7 @@ public interface CustomerMappingService {
 
  @Mapping(target = "id", ignore = true)
  @Mapping(target = "name", ignore = true)
- @Mapping(target = "active", constant = "true")
+// @Mapping(target = "active", constant = "true")
  Customer mapDtoToEntity (CustomerDto dto);
 
 }

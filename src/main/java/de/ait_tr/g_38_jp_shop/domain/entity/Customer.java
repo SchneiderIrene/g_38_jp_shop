@@ -11,13 +11,11 @@ public class Customer {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "is_active")
     private boolean isActive;
-
-
-    @Column(name = "name")
-    private String name;
 
 
 

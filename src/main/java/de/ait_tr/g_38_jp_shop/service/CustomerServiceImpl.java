@@ -6,6 +6,7 @@ import de.ait_tr.g_38_jp_shop.domain.entity.Product;
 import de.ait_tr.g_38_jp_shop.repository.CustomerRepository;
 import de.ait_tr.g_38_jp_shop.service.interfaces.CustomerService;
 import de.ait_tr.g_38_jp_shop.service.mapping.CustomerMappingService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 
@@ -24,6 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public CustomerDto save(CustomerDto dto) {
         Customer customer = mappingService.mapDtoToEntity(dto);
         repository.save(customer);
@@ -61,43 +63,45 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public void update(CustomerDto dto) {
         Customer existedCustomer = repository.findById(dto.getCustomerId()).orElse(null);
         if (existedCustomer != null) {
             existedCustomer.setName(dto.getCustomerName());
             existedCustomer.setActive(dto.isActive());
-            repository.save(existedCustomer);
         }else {
             throw new RuntimeException("Customer not found");
         }
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         Customer customer = repository.findById(id).orElse(null);
         if (customer == null) {
             throw new RuntimeException("Product not found");
         }
-        repository.delete(customer);
+        customer.setActive(false);
     }
 
     @Override
+    @Transactional
     public void deleteByName(String name) {
         Customer customer = repository.findByName(name);
         if (customer == null) {
             throw new RuntimeException("Product not found");
         }
-        repository.delete(customer);
+        customer.setActive(false);
     }
 
     @Override
+    @Transactional
     public void restoreById(Long id) {
         Customer customer = repository.findById(id).orElse(null);
         if (customer == null) {
             throw new RuntimeException("Product not found");
         }
         customer.setActive(true);
-        repository.save(customer);
     }
 
 }

@@ -10,7 +10,6 @@ public class CustomerDto {
 
     public CustomerDto() {
     }
-
     public Long getCustomerId() {
         return customerId;
     }

@@ -1,7 +1,6 @@
 package de.ait_tr.g_38_jp_shop.controller;
 
 import de.ait_tr.g_38_jp_shop.domain.dto.CustomerDto;
-import de.ait_tr.g_38_jp_shop.domain.dto.ProductDto;
 import de.ait_tr.g_38_jp_shop.service.interfaces.CustomerService;
 import org.springframework.web.bind.annotation.*;
 

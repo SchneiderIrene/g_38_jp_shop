@@ -5,12 +5,13 @@ import de.ait_tr.g_38_jp_shop.domain.entity.Product;
 import de.ait_tr.g_38_jp_shop.repository.ProductRepository;
 import de.ait_tr.g_38_jp_shop.service.interfaces.ProductService;
 import de.ait_tr.g_38_jp_shop.service.mapping.ProductMappingService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -24,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDto save(ProductDto dto) {
         Product product = mappingService.mapDtoToEntity(dto);
         repository.save(product);
@@ -35,8 +37,8 @@ public class ProductServiceImpl implements ProductService {
 
         return repository.findAll()
                 .stream()
-                .filter(x->x.isActive())
-                .map(x->mappingService.mapEntityToDto(x))
+                .filter(Product::isActive)
+                .map(x -> mappingService.mapEntityToDto(x))
                 .toList();
     }
 
@@ -57,71 +59,86 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void update(ProductDto dto) {
         Product existedProduct = repository.findById(dto.getProductId()).orElse(null);
         if (existedProduct != null) {
             existedProduct.setTitle(dto.getTitle());
             existedProduct.setPrice(dto.getPrice());
-            repository.save(existedProduct);
-        }else {
+        } else {
             throw new RuntimeException("Product not found");
         }
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         Product product = repository.findById(id).orElse(null);
         if (product == null) {
             throw new RuntimeException("Product not found");
         }
-        repository.delete(product);
+        product.setActive(false);
     }
 
     @Override
+    @Transactional
     public void deleteByTitle(String title) {
-    Product product = repository.findByTitle(title);
-    if (product == null) {
-        throw new RuntimeException("Product not found");
-    }
-    repository.delete(product);
+        Product product = repository.findByTitle(title);
+        if (product == null) {
+            throw new RuntimeException("Product not found");
+        }
+        product.setActive(false);
     }
 
     @Override
+    @Transactional
     public void restoreById(Long id) {
-    Product product = repository.findById(id).orElse(null);
-    if (product == null) {
-        throw new RuntimeException("Product not found");
-    }
-    product.setActive(true);
-    repository.save(product);
+        Product product = repository.findById(id).orElse(null);
+        if (product == null) {
+            throw new RuntimeException("Product not found");
+        }
+        product.setActive(true);
     }
 
     @Override
     public int getTotalQuantity() {
-        List<Product> products = repository.findAll();
-        return products.size();
+        return (int) repository.findAll()
+                .stream()
+                .filter(Product::isActive)
+                .count();
     }
 
     @Override
     public BigDecimal getTotalPrice() {
-        List <Product> products = repository.findAll();
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        for (Product product : products) {
-            totalPrice = totalPrice.add(product.getPrice());
-        }
-        return totalPrice;
+        return repository.findAll()
+                .stream()
+                .filter(Product::isActive)
+                .map(Product::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
     public BigDecimal getAveragePrice() {
-        List <Product> products = repository.findAll();
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        for (Product product : products) {
-            totalPrice = totalPrice.add(product.getPrice());
-        }
-        if(!products.isEmpty()) {
-            return totalPrice.divide(BigDecimal.valueOf(products.size()), 2, RoundingMode.HALF_UP);
-        }
-        return BigDecimal.ZERO;
+        return getTotalPrice()
+                .divide(BigDecimal.valueOf(getTotalQuantity()), 2, RoundingMode.HALF_UP);
+
+
+//                repository.findAll()
+//                .stream()
+//                .filter(Product::isActive)
+//                .map(Product::getPrice)
+//                .reduce(BigDecimal.ZERO, BigDecimal::add)
+//                .divide(BigDecimal.valueOf(getTotalQuantity()), 2, RoundingMode.HALF_UP);
+
+
+//        List<Product> products = repository.findAll();
+//        BigDecimal totalPrice = BigDecimal.ZERO;
+//        for (Product product : products) {
+//            totalPrice = totalPrice.add(product.getPrice());
+//        }
+//        if (!products.isEmpty()) {
+//            return totalPrice.divide(BigDecimal.valueOf(products.size()), 2, RoundingMode.HALF_UP);
+//        }
+//        return BigDecimal.ZERO;
     }
 }
