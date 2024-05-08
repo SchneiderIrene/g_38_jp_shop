@@ -13,3 +13,9 @@ spring:
 key:
   access: W0s9WxTNJzUzDGzG0iVvYs2n711wA1B4pE4xHY4pbI0=
   refresh: 2AU7vBC7gJVlh/72A5BpWq6qTquDCv77K4rs87O0PQ0=
+
+logging:
+  file:
+    name: logs/log.txt
+  level:
+    root: info

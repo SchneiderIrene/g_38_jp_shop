@@ -10,12 +10,11 @@ import org.mapstruct.Mapping;
 public interface CustomerMappingService {
 
  @Mapping(target = "customerId", source = "id")
- @Mapping(target = "customerName", source = "name")
+// @Mapping(target = "customerName", source = "name")
  CustomerDto mapEntityToDto (Customer entity);
 
 
  @Mapping(target = "id", ignore = true)
- @Mapping(target = "name", ignore = true)
 // @Mapping(target = "active", constant = "true")
  Customer mapDtoToEntity (CustomerDto dto);
 

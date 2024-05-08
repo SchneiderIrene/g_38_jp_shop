@@ -5,7 +5,7 @@ import java.util.Objects;
 public class CustomerDto {
 
     private Long customerId;
-    private String customerName;
+    private String name;
     private boolean isActive;
 
     public CustomerDto() {
@@ -18,12 +18,12 @@ public class CustomerDto {
         this.customerId = customerId;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getName() {
+        return name;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public boolean isActive() {
@@ -39,19 +39,19 @@ public class CustomerDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CustomerDto that = (CustomerDto) o;
-        return Objects.equals(customerId, that.customerId) && Objects.equals(customerName, that.customerName);
+        return Objects.equals(customerId, that.customerId) && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, customerName);
+        return Objects.hash(customerId, name);
     }
 
     @Override
     public String toString() {
         return "CustomerDto{" +
                 "customerId=" + customerId +
-                ", customerName='" + customerName + '\'' +
+                ", customerName='" + name + '\'' +
                 '}';
     }
 }

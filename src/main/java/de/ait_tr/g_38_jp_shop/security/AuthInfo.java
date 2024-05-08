@@ -11,7 +11,6 @@ import java.util.Set;
 public class AuthInfo implements Authentication {
 
     private boolean authenticated;
-
     private String username;
     private Set<Role> roles;
 
@@ -47,7 +46,7 @@ public class AuthInfo implements Authentication {
 
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-    this.authenticated = isAuthenticated;
+        this.authenticated = isAuthenticated;
     }
 
     @Override

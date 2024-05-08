@@ -3,6 +3,7 @@ package de.ait_tr.g_38_jp_shop.security.sec_dto;
 import java.util.Objects;
 
 public class RefreshRequestDto {
+
     private String refreshToken;
 
     public String getRefreshToken() {
@@ -19,7 +20,7 @@ public class RefreshRequestDto {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(refreshToken);
+        return Objects.hash(refreshToken);
     }
 
     @Override

@@ -22,8 +22,7 @@ import java.util.*;
 public class TokenService {
 
     private SecretKey accessKey;
-    private  SecretKey refreshKey;
-
+    private SecretKey refreshKey;
     private RoleRepository roleRepository;
 
     public TokenService(
@@ -63,14 +62,12 @@ public class TokenService {
     }
 
     public boolean validateAccessToken(String accessToken) {
-        return  validateToken(accessToken, accessKey);
+        return validateToken(accessToken, accessKey);
     }
 
     public boolean validateRefreshToken(String refreshToken) {
-        return  validateToken(refreshToken, refreshKey);
+        return validateToken(refreshToken, refreshKey);
     }
-
-
 
     private boolean validateToken(String token, SecretKey key) {
         try {
@@ -88,11 +85,11 @@ public class TokenService {
         return getClaims(accessToken, accessKey);
     }
 
-    public Claims getRefreshsClaims(String refreshToken) {
+    public Claims getRefreshClaims(String refreshToken) {
         return getClaims(refreshToken, refreshKey);
     }
 
-    private Claims getClaims(String token, SecretKey key){
+    private Claims getClaims(String token, SecretKey key) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -100,16 +97,17 @@ public class TokenService {
                 .getPayload();
     }
 
-    public AuthInfo mapClaimsToAuthoInfo(Claims claims){
+    public AuthInfo mapClaimsToAuthInfo(Claims claims) {
         String username = claims.getSubject();
-        List<LinkedHashMap<String, String>> rolesList =
-                (List<LinkedHashMap<String, String>>)claims.get("roles");
+        List<LinkedHashMap<String, String>> rolesList = (List<LinkedHashMap<String, String>>) claims.get("roles");
         Set<Role> roles = new HashSet<>();
-        for (LinkedHashMap<String, String> roleEntry : rolesList){
+
+        for (LinkedHashMap<String, String> roleEntry : rolesList) {
             String roleTitle = roleEntry.get("authority");
             Role role = roleRepository.findByTitle(roleTitle);
             roles.add(role);
         }
+
         return new AuthInfo(username, roles);
     }
 }

@@ -2,7 +2,6 @@ package de.ait_tr.g_38_jp_shop.service;
 
 import de.ait_tr.g_38_jp_shop.domain.dto.CustomerDto;
 import de.ait_tr.g_38_jp_shop.domain.entity.Customer;
-import de.ait_tr.g_38_jp_shop.domain.entity.Product;
 import de.ait_tr.g_38_jp_shop.repository.CustomerRepository;
 import de.ait_tr.g_38_jp_shop.service.interfaces.CustomerService;
 import de.ait_tr.g_38_jp_shop.service.mapping.CustomerMappingService;
@@ -67,7 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void update(CustomerDto dto) {
         Customer existedCustomer = repository.findById(dto.getCustomerId()).orElse(null);
         if (existedCustomer != null) {
-            existedCustomer.setName(dto.getCustomerName());
+            existedCustomer.setName(dto.getName());
             existedCustomer.setActive(dto.isActive());
         }else {
             throw new RuntimeException("Customer not found");

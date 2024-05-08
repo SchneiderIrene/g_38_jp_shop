@@ -6,6 +6,8 @@ import de.ait_tr.g_38_jp_shop.repository.ProductRepository;
 import de.ait_tr.g_38_jp_shop.service.interfaces.ProductService;
 import de.ait_tr.g_38_jp_shop.service.mapping.ProductMappingService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private ProductRepository repository;
     private ProductMappingService mappingService;
@@ -27,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto save(ProductDto dto) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         Product product = mappingService.mapDtoToEntity(dto);
         repository.save(product);
         return mappingService.mapEntityToDto(product);
@@ -44,6 +49,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getById(Long id) {
+
+//        logger.info("Database request: get product by id {}", id);
+//        logger.warn("Product with id {} not found", id);
+//        logger.error("Error");
 
         if (id == null || id < 1) {
             throw new RuntimeException("Product ID is incorrect");

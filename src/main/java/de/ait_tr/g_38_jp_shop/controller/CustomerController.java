@@ -22,7 +22,7 @@ public class CustomerController {
         return service.getById(id);
     }
 
-    @PostMapping("/save")
+    @PostMapping
     public CustomerDto save(@RequestBody CustomerDto customer) {
         return service.save(customer);
     }

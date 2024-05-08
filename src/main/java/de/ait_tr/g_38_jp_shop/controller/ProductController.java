@@ -42,6 +42,7 @@ public class ProductController {
 
     @PostMapping
     public ProductDto save(@RequestBody ProductDto product) {
+        product.setProductId(null);
         return service.save(product);
     }
 
