@@ -97,7 +97,7 @@ public class TokenService {
                 .getPayload();
     }
 
-    public AuthInfo mapClaimsToAuthInfo(Claims claims) {
+    public AuthInfo generateAuthInfo(Claims claims) {
         String username = claims.getSubject();
         List<LinkedHashMap<String, String>> rolesList = (List<LinkedHashMap<String, String>>) claims.get("roles");
         Set<Role> roles = new HashSet<>();

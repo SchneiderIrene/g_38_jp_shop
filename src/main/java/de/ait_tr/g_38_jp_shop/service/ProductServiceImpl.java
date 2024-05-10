@@ -2,6 +2,10 @@ package de.ait_tr.g_38_jp_shop.service;
 
 import de.ait_tr.g_38_jp_shop.domain.dto.ProductDto;
 import de.ait_tr.g_38_jp_shop.domain.entity.Product;
+import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.FirstTestException;
+import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.FourthTestException;
+import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.SecondTestException;
+import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.ThirdTestException;
 import de.ait_tr.g_38_jp_shop.repository.ProductRepository;
 import de.ait_tr.g_38_jp_shop.service.interfaces.ProductService;
 import de.ait_tr.g_38_jp_shop.service.mapping.ProductMappingService;
@@ -31,9 +35,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto save(ProductDto dto) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
         Product product = mappingService.mapDtoToEntity(dto);
-        repository.save(product);
+
+        try {
+            repository.save(product);
+        } catch (Exception e){
+            throw new FourthTestException("Error saving product", e);
+        }
+
+
         return mappingService.mapEntityToDto(product);
     }
 
@@ -55,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
 //        logger.error("Error");
 
         if (id == null || id < 1) {
-            throw new RuntimeException("Product ID is incorrect");
+            throw new ThirdTestException("Product ID is incorrect");
         }
 
         Product product = repository.findById(id).orElse(null);
