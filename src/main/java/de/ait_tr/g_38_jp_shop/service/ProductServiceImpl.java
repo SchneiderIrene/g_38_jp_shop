@@ -2,10 +2,7 @@ package de.ait_tr.g_38_jp_shop.service;
 
 import de.ait_tr.g_38_jp_shop.domain.dto.ProductDto;
 import de.ait_tr.g_38_jp_shop.domain.entity.Product;
-import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.FirstTestException;
-import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.FourthTestException;
-import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.SecondTestException;
-import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.ThirdTestException;
+import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.*;
 import de.ait_tr.g_38_jp_shop.repository.ProductRepository;
 import de.ait_tr.g_38_jp_shop.service.interfaces.ProductService;
 import de.ait_tr.g_38_jp_shop.service.mapping.ProductMappingService;
@@ -72,11 +69,13 @@ public class ProductServiceImpl implements ProductService {
         Product product = repository.findById(id).orElse(null);
 
         if (product == null) {
-            throw new RuntimeException("Product not found");
+            throw new ProductNotFoundException("ProductNotFoundException: Product not found");
         }
+
 
         return mappingService.mapEntityToDto(product);
     }
+
 
     @Override
     @Transactional
@@ -86,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
             existedProduct.setTitle(dto.getTitle());
             existedProduct.setPrice(dto.getPrice());
         } else {
-            throw new RuntimeException("Product not found");
+            throw new ProductNotFoundByUpdateException("Product not found");
         }
     }
 
@@ -95,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteById(Long id) {
         Product product = repository.findById(id).orElse(null);
         if (product == null) {
-            throw new RuntimeException("Product not found");
+            throw new ProductNotFoundByDeleteException("ProductNotFoundByDeleteException: Product not found");
         }
         product.setActive(false);
     }
@@ -115,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
     public void restoreById(Long id) {
         Product product = repository.findById(id).orElse(null);
         if (product == null) {
-            throw new RuntimeException("Product not found");
+            throw new ProductNotFoundByRestoreException("ProductNotFoundByRestoreException: Product not found");
         }
         product.setActive(true);
     }

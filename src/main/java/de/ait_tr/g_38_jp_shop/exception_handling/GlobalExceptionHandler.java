@@ -1,6 +1,8 @@
 package de.ait_tr.g_38_jp_shop.exception_handling;
 
 import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.FourthTestException;
+import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.ProductNotFoundByDeleteException;
+import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.ProductNotFoundByRestoreException;
 import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.ThirdTestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,4 +30,20 @@ public class GlobalExceptionHandler {
     private String parseExceptionMessage(String message) {
         return message;
     }
+
+    @ExceptionHandler(ProductNotFoundByDeleteException.class)
+    public ResponseEntity<Response> handleException(ProductNotFoundByDeleteException e) {
+        Response response = new Response(e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.I_AM_A_TEAPOT);
+    }
+
+    @ExceptionHandler(ProductNotFoundByRestoreException.class)
+    public ResponseEntity<Response> handleException(ProductNotFoundByRestoreException e) {
+        Throwable childException = e.getCause();
+        Response response = new Response(e.getMessage(),
+                childException == null ? null : parseExceptionMessage(childException.getMessage()));
+        return new ResponseEntity<>(response, HttpStatus.I_AM_A_TEAPOT);
+    }
+
+
 }

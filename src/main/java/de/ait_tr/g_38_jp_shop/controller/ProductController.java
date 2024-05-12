@@ -3,6 +3,7 @@ package de.ait_tr.g_38_jp_shop.controller;
 import de.ait_tr.g_38_jp_shop.domain.dto.ProductDto;
 import de.ait_tr.g_38_jp_shop.exception_handling.Response;
 import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.FirstTestException;
+import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.ProductNotFoundException;
 import de.ait_tr.g_38_jp_shop.service.interfaces.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -88,9 +89,9 @@ public class ProductController {
         service.restoreById(id);
     }
 
-    @ExceptionHandler(FirstTestException.class)
+    @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
-    public Response handleException (FirstTestException e){
+    public Response handleException (ProductNotFoundException e){
         return  new Response(e.getMessage());
     }
 
