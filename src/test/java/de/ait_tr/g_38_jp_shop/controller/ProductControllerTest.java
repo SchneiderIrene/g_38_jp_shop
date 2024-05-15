@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.math.BigDecimal;
@@ -59,8 +56,10 @@ class ProductControllerTest {
 
     private final String URL_PREFIX = "http://localhost:";
     private final String AUTH_RESOURCE_NAME = "/auth";
+    private final String PRODUCTS_RESOURCE_NAME = "/products";
     private final String LOGIN_ENDPOINT = "/login";
     private final String ACCESS_ENDPOINT = "/access";
+    private final String ALL_ENDPOINT = "/all";
     private final String BEARER_PREFIX = "Bearer ";
 
     @BeforeEach
@@ -72,7 +71,7 @@ class ProductControllerTest {
         testProduct.setTitle(TEST_PRODUCT_TITLE);
         testProduct.setPrice(TEST_PRODUCT_PRICE);
 
-        BCryptPasswordEncoder encoder;
+        BCryptPasswordEncoder encoder = null;
         Role roleAdmin;
         Role roleUser = null;
 
@@ -93,7 +92,7 @@ class ProductControllerTest {
         }
 
         if (user == null) {
-            encoder = new BCryptPasswordEncoder();
+            encoder = encoder == null ? new BCryptPasswordEncoder() : encoder;
 
             user = new User();
             user.setUsername(USER_NAME);
@@ -129,7 +128,15 @@ class ProductControllerTest {
     }
 
     @Test
-    public void test() {
+    public void positiveGettingAllProductsWithoutAuthorization() {
 
+        String url = URL_PREFIX + port + PRODUCTS_RESOURCE_NAME + ALL_ENDPOINT;
+        HttpEntity<Object> request = new HttpEntity<>(headers);
+
+        ResponseEntity<Object> response = template
+                .exchange(url, HttpMethod.GET, request, Object.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "Response has unexpected status");
+        assertTrue(response.hasBody(), "Response does not contain body");
     }
 }

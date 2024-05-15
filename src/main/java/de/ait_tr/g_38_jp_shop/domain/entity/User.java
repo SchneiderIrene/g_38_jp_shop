@@ -14,19 +14,19 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class User implements UserDetails {
-//    public static void main(String[] args) {
+    //    public static void main(String[] args) {
 //        System.out.println(new BCryptPasswordEncoder().encode("111"));
 //    }
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name = "id")
-private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-@Column(name = "username")
-private String username;
+    @Column(name = "username")
+    private String username;
 
-@Column(name = "password")
-private String password;
+    @Column(name = "password")
+    private String password;
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -37,6 +37,27 @@ private String password;
     )
     private Set<Role> roles;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "is_active")
+    private boolean active;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -102,17 +123,18 @@ private String password;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
+        return active == user.active && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, roles);
+        return Objects.hash(id, username, password, roles, email, active);
     }
+
 
     @Override
     public String toString() {
-        return String.format("User: ID - %d, username - %s, roles - %s",
-                id, username, roles);
+        return String.format("User: ID - %d, username - %s, email - %s, active - %s, roles - %s",
+                id, username, email, active ? "yes" : "no", roles);
     }
 }
