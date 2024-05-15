@@ -4,10 +4,12 @@ import de.ait_tr.g_38_jp_shop.domain.entity.ConfirmationCode;
 import de.ait_tr.g_38_jp_shop.domain.entity.User;
 import de.ait_tr.g_38_jp_shop.repository.ConfirmationCodeRepository;
 import de.ait_tr.g_38_jp_shop.service.interfaces.ConfirmatationService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Service
 public class ConfirmationServiceImpl implements ConfirmatationService {
 
     private ConfirmationCodeRepository repository;
