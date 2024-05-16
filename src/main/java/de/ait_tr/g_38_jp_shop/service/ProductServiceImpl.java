@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -159,5 +158,17 @@ public class ProductServiceImpl implements ProductService {
 //            return totalPrice.divide(BigDecimal.valueOf(products.size()), 2, RoundingMode.HALF_UP);
 //        }
 //        return BigDecimal.ZERO;
+    }
+
+    @Override
+    @Transactional
+    public void attachImage(String imgUrl, String prductTitle) {
+        Product product = repository.findByTitle(prductTitle);
+
+        if (product == null) {
+            throw new ProductNotFoundException(prductTitle);
+        }
+        product.setImage(imgUrl);
+
     }
 }

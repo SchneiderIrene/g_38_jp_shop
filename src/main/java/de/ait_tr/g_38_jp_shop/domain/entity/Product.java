@@ -20,7 +20,7 @@ public class Product {
     @Column(name = "title")
     @NotNull(message = "Product title cannot be null")
     @NotBlank(message = "Product title cannot be empty")
-    @Pattern(regexp = "[A-Z][a-z]{2,}",
+    @Pattern(regexp = "[A-Z][a-z ]{2,}",
             message = "Product title should be at least 3 character length, " +
                     "start with capital letter and contain only latin symbols")
     private String title;
@@ -38,8 +38,19 @@ public class Product {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @ManyToMany
-    private Set<Role> roles;
+
+
+    @Column(name = "image")
+    private String image;
+
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -75,15 +86,16 @@ public class Product {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return isActive == product.isActive && Objects.equals(id, product.id) && Objects.equals(title, product.title) && Objects.equals(price, product.price);
+        return isActive == product.isActive && Objects.equals(id, product.id) && Objects.equals(title, product.title) && Objects.equals(price, product.price) && Objects.equals(image, product.image);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, price, isActive);
+        return Objects.hash(id, title, price, isActive, image);
     }
 
     @Override

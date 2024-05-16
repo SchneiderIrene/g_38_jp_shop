@@ -34,12 +34,13 @@ public class SecurityConfig {
                 .sessionManagement(x -> x
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(x -> x
-                        .requestMatchers(HttpMethod.GET, "/products/all").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/access", "/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/hello").permitAll()
-                        .anyRequest().authenticated())
+//                        .requestMatchers(HttpMethod.GET, "/products/all").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/products").hasAnyRole("ADMIN", "USER")
+//                        .requestMatchers(HttpMethod.POST, "/products", "/files").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/access", "/register").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/hello").permitAll()
+                        .anyRequest().permitAll())
+//                        .authenticated())
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();
