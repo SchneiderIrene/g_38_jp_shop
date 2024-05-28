@@ -2,6 +2,13 @@ package de.ait_tr.g_38_jp_shop.security.config;
 
 
 import de.ait_tr.g_38_jp_shop.security.sec_filter.TokenFilter;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,11 +46,51 @@ public class SecurityConfig {
 //                        .requestMatchers(HttpMethod.POST, "/products", "/files").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/access", "/register").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/hello").permitAll()
-                        .anyRequest().permitAll())
+//                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .anyRequest()
+                       .permitAll())
 //                        .authenticated())
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterAfter(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+
+    public OpenAPI openAPI() {
+
+        return new OpenAPI().addSecurityItem(new SecurityRequirement().
+
+                        addList("Bearer Authentication"))
+
+                .components(new Components().addSecuritySchemes
+
+                        ("Bearer Authentication", createAPIKeyScheme()))
+
+                .info(new Info().title("JWT demo app")
+
+                        .description("Demo application for JSON web tokens")
+
+                        .version("1.0.0").contact(new Contact().name("Andrey Pomelov")
+
+                                .email( "andrey.pomelov@ait-tr.de").url("https://www.ait-tr.de/"))
+
+                        .license(new License().name("@AndreyPomelov")
+
+                                .url("https://www.ait-tr.de/")));
+
+    }
+
+
+
+    private SecurityScheme createAPIKeyScheme() {
+
+        return new SecurityScheme().type(SecurityScheme.Type.HTTP)
+
+                .bearerFormat("JWT")
+
+                .scheme("bearer");
+
     }
 
     // Конфигурация для базовой авторизации

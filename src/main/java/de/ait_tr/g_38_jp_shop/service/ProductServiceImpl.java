@@ -162,11 +162,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void attachImage(String imgUrl, String prductTitle) {
-        Product product = repository.findByTitle(prductTitle);
+    public void attachImage(String imgUrl, String productTitle) {
+        Product product = repository.findByTitle(productTitle);
 
         if (product == null) {
-            throw new ProductNotFoundException(prductTitle);
+            throw new ProductNotFoundException(productTitle);
         }
         product.setImage(imgUrl);
 

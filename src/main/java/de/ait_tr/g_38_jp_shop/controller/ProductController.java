@@ -5,6 +5,9 @@ import de.ait_tr.g_38_jp_shop.exception_handling.Response;
 import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.FirstTestException;
 import de.ait_tr.g_38_jp_shop.exception_handling.exceptions.ProductNotFoundException;
 import de.ait_tr.g_38_jp_shop.service.interfaces.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@Tag(name = "Product controller", description = "Controller for some operations with available products")
 public class ProductController {
 
     private ProductService service;
@@ -20,6 +24,7 @@ public class ProductController {
     public ProductController(ProductService service) {
         this.service = service;
     }
+
 
     // Способ 1:
     // Передача значений как часть строки запроса
@@ -36,7 +41,9 @@ public class ProductController {
     // http://localhost:8080/products?id=5
 
     @GetMapping
-    public ProductDto getById(@RequestParam Long id) {
+    public ProductDto getById(@RequestParam
+                                  @Parameter(description = "Product ID")
+                                  Long id) {
         return service.getById(id);
     }
 
@@ -45,12 +52,18 @@ public class ProductController {
 // http://localhost:8080/products
 
     @PostMapping
-    public ProductDto save(@RequestBody ProductDto product) {
+    public ProductDto save(@RequestBody
+                               @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Product DTO to save")
+                               ProductDto product) {
         product.setProductId(null);
         return service.save(product);
     }
 
     @GetMapping("/all")
+    @Operation (
+            summary = "Get all products",
+            description = "Receiving all products available in the DB"
+    )
     public List<ProductDto> getAll(){
         return  service.getAll();
     }

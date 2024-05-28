@@ -1,12 +1,24 @@
 package de.ait_tr.g_38_jp_shop.domain.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Schema(description = "Product DTO")
 public class ProductDto {
 
+    @Schema(description = "Product ID",
+    example = "777",
+    accessMode = Schema.AccessMode.READ_ONLY)
     private Long productId;
+
+    @Schema(description = "Title of Product",
+            example = "Banana")
     public String title;
+
+    @Schema(description = "Product price",
+            example = "129.99")
     public BigDecimal price;
 
     public ProductDto() {}
